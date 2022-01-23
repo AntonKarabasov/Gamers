@@ -1,0 +1,4 @@
+vendor/
+.idea/
+src/settings.php
+src/Gamer/Services/EmailSender.php
