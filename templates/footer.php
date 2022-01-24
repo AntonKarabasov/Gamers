@@ -16,15 +16,15 @@
     </div>
 </div>
 
-<?php if (!in_array($title, ['Регистрация', 'Вход'])) {?>
+<?php if (!in_array($title, ['Регистрация', 'Вход']) && empty($error)) {?>
 <div class="panel panel-info">
     <div class="panel-heading"><div class="sidebar-header">Вход</div></div>
     <div class="panel-body">
         <?php if (empty($user)) {?>
         <form action="/users/login" method="post">
-            <?php if (!empty($error)): ?>
+            <?php if (!empty($errorLogin)): ?>
                 <div class="alert alert-danger" role="alert">
-                    <?= $error ?>
+                    <?= $errorLogin ?>
                 </div>
             <?php endif; ?>
             <div class="form-group">

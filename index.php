@@ -35,4 +35,10 @@ try {
 } catch (\Gamer\Exceptions\ActivationException $e) {
     $view = new \Gamer\View\View(__DIR__ . '/templates/errors');
     $view->renderHtml('ActivationError.php', ['error' => $e->getMessage()], 500);
+}  catch (\Gamer\Exceptions\UnauthorizedException $e) {
+    $view = new \Gamer\View\View(__DIR__ . '/templates/errors');
+    $view->renderHtml('401.php', ['error' => $e->getMessage()], 401);
+}  catch (\Gamer\Exceptions\Forbidden $e) {
+    $view = new \Gamer\View\View(__DIR__ . '/templates/errors');
+    $view->renderHtml('403.php', ['error' => $e->getMessage()], 403);
 }

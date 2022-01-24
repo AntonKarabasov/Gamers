@@ -2,8 +2,9 @@
 
 namespace Gamer\Models\News;
 
-use Gamer\Models\Users\User;
 use Gamer\Models\ActiveRecordEntity;
+use Gamer\Models\Users\User;
+use Gamer\Exceptions\InvalidArgumentException;
 
 class News extends ActiveRecordEntity
 {
@@ -82,6 +83,30 @@ class News extends ActiveRecordEntity
     {
         $this->authorId = $author->getId();
     }
+
+    /**
+     * @return News
+     */
+    public static function createFromArray(array $fields, User $author): News
+    {
+        if (empty($fields['name'])) {
+            throw new InvalidArgumentException('Не передано название новости');
+        }
+
+        if (empty($fields['text'])) {
+            throw new InvalidArgumentException('Не передан текст новости');
+        }
+
+        $news = new News;
+        $news->setAuthor($author);
+        $news->setName($fields['name']);
+        $news->setText($fields['text']);
+
+        $news->save();
+
+        return $news;
+    }
+
 
     /**
      * @return string

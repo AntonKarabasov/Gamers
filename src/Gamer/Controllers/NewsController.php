@@ -2,6 +2,9 @@
 
 namespace Gamer\Controllers;
 
+use Gamer\Exceptions\Forbidden;
+use Gamer\Exceptions\UnauthorizedException;
+use Gamer\Exceptions\InvalidArgumentException;
 use Gamer\Exceptions\NotFoundException;
 use Gamer\Models\Games\Game;
 use Gamer\Models\News\News;
@@ -55,14 +58,27 @@ class NewsController extends AbstractController
 
     public function  add()
     {
-        $author = User::getById(1);
+        if ($this->user === null) {
+            throw new UnauthorizedException();
+        }
 
-        $news = new News();
-        $news->setAuthor($author);
-        $news->setName('Новая статья');
-        $news->setText('Текст новой статьи');
+        if (!$this->user->isAdmin()) {
+            throw new Forbidden('Для добавления новости нужно обладать правами администратора');
+        }
 
-        $news->save();
+        if (!empty($_POST)) {
+            try {
+                $news = News::createFromArray($_POST, $this->user);
+            } catch (InvalidArgumentException $e) {
+                $this->view->renderHtml('news/add.php', ['error' => $e->getMessage()]);
+                return;
+            }
+
+            header('Location: /news/' . $news->getId(), true, 302);
+            exit();
+        }
+
+        $this->view->renderHtml('news/add.php');
     }
 
     public function delete($newsId)

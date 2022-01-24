@@ -86,6 +86,14 @@ class User extends ActiveRecordEntity
         return $this->createdAt;
     }
 
+    /**
+     * @return bool
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
     public function activate(): void
     {
         $this->isConfirmed = true;

@@ -21,7 +21,7 @@ class UsersController extends AbstractController
             try {
                 $user = User::signUp($_POST);
             } catch (InvalidArgumentException $e) {
-                $this->view->renderHtml('users/signUp.php', ['error' => $e->getMessage()]);
+                $this->view->renderHtml('users/signUp.php', ['error' => $e->getMessage()], 'Регистрация');
                 return;
             }
 
@@ -81,7 +81,7 @@ class UsersController extends AbstractController
                 header('Location: /');
                 exit();
             } catch (InvalidArgumentException $e) {
-                $this->view->renderHtml('users/login.php', ['error' => $e->getMessage()], 'Вход');
+                $this->view->renderHtml('users/login.php', ['errorLogin' => $e->getMessage()], 'Вход');
                 return;
             }
         }
