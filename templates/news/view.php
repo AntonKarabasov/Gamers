@@ -2,7 +2,7 @@
     <h1><?= $news->getName() ?></h1>
     <hr>
     <div class="embed-responsive embed-responsive-16by9" >
-        <img src="/../assets/img/news/news<?= $news->getId() ?>.jpg" alt="news<?= $news->getId() ?>">
+        <img src="<?= $news->getLinkImg() ?>" alt="news<?= $news->getId() ?>" class="img-fluid">
     </div>
     <br>
     <p><?= $news->getText() ?></p>

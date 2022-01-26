@@ -5,6 +5,7 @@ namespace Gamer\Models\News;
 use Gamer\Models\ActiveRecordEntity;
 use Gamer\Models\Users\User;
 use Gamer\Exceptions\InvalidArgumentException;
+use Gamer\Services\Upload;
 
 class News extends ActiveRecordEntity
 {
@@ -16,6 +17,9 @@ class News extends ActiveRecordEntity
 
     /** @var string */
     protected $text;
+
+    /** @var string */
+    protected $linkImg;
 
     /** @var string */
     protected $createdAt;
@@ -42,6 +46,14 @@ class News extends ActiveRecordEntity
     public function getText(): string
     {
         return $this->text;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLinkImg(): string
+    {
+        return $this->linkImg;
     }
 
     /**
@@ -77,6 +89,14 @@ class News extends ActiveRecordEntity
     }
 
     /**
+     * @param string $linkImg
+     */
+    public function setLinkImg(string $linkImg): void
+    {
+        $this->linkImg = $linkImg;
+    }
+
+    /**
      * @param User $author
      */
     public function setAuthor(User $author): void
@@ -87,7 +107,7 @@ class News extends ActiveRecordEntity
     /**
      * @return News
      */
-    public static function createFromArray(array $fields, User $author): News
+    public static function createFromArray(array $fields, array $image, User $author): News
     {
         if (empty($fields['name'])) {
             throw new InvalidArgumentException('Не передано название новости');
@@ -97,12 +117,27 @@ class News extends ActiveRecordEntity
             throw new InvalidArgumentException('Не передан текст новости');
         }
 
+        if (empty($image['attachment'])) {
+            throw new InvalidArgumentException('Не передана картинка новости');
+        }
+
         $news = new News;
         $news->setAuthor($author);
         $news->setName($fields['name']);
         $news->setText($fields['text']);
 
         $news->save();
+
+        try {
+            $link = Upload::uploadImage($image['attachment'], $news->getId());
+        } catch (InvalidArgumentException $e) {
+            $news->delete();
+            throw new InvalidArgumentException($e->getMessage());
+        }
+
+        $news->setLinkImg($link);
+        $news->save();
+
 
         return $news;
     }

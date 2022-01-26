@@ -4,7 +4,7 @@
  <div class="row">
       <div class="well clearfix">
            <div class="col-lg-3 col-md-2">
-                <a href="show.html"><img class="img-thumbnail" src="/../assets/img/news/news<?= $oneNews->getId() ?>.jpg" alt="<?= $oneNews->getName()?>"></a>
+                <a href="show.html"><img class="img-thumbnail" src="<?= $oneNews->getLinkImg() ?>" alt="<?= $oneNews->getName()?>"></a>
            </div>
            <div class="col-lg-9 col-md-10">
                 <h3><?= $oneNews->getName()?></h3>

@@ -6,12 +6,16 @@
         <?= $error ?>
     </div>
 <?php endif; ?>
-    <form action="/news/add" method="post">
+    <form action="/news/add" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="picture">Картинка</label>
+            <input type="file" class="form-control-file" id="picture" name="attachment" value="<?= $_FILES['attachment'] ?? '' ?>">
+        </div>
         <div class="form-group">
             <label>Название статьи <input class="form-control" type="text" name="name" value="<?= $_POST['name'] ?? '' ?>"></label>
         </div>
         <div class="form-group">
-            <label for="exampleFormControlTextarea1">Текст статьи <textarea class="form-control" id="exampleFormControlTextarea1" name="text" id="text" rows="10" cols="80"><?= $_POST['text'] ?? '' ?></textarea></label>
+            <label for="Textarea">Текст статьи <textarea class="form-control" id="Textarea" name="text" id="text" rows="10" cols="80"><?= $_POST['text'] ?? '' ?></textarea></label>
         </div>
         <input type="submit" class="btn btn-lg btn-success pull" value="Создать">
     </form>

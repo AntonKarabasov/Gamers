@@ -68,7 +68,7 @@ class NewsController extends AbstractController
 
         if (!empty($_POST)) {
             try {
-                $news = News::createFromArray($_POST, $this->user);
+                $news = News::createFromArray($_POST, $_FILES, $this->user);
             } catch (InvalidArgumentException $e) {
                 $this->view->renderHtml('news/add.php', ['error' => $e->getMessage()]);
                 return;
