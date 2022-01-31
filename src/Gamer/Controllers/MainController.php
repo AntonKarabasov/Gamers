@@ -2,11 +2,9 @@
 
 namespace Gamer\Controllers;
 
-use Gamer\Models\Users\User;
-use Gamer\Models\Users\UsersAuthService;
 use Gamer\Models\Games\Game;
 use Gamer\Models\News\News;
-use Gamer\View\View;
+
 
 
 class MainController extends AbstractController

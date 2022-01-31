@@ -8,9 +8,7 @@ use Gamer\Exceptions\InvalidArgumentException;
 use Gamer\Exceptions\NotFoundException;
 use Gamer\Models\Games\Game;
 use Gamer\Models\News\News;
-use Gamer\Models\Users\User;
-use Gamer\Models\Users\UsersAuthService;
-use Gamer\View\View;
+
 
 class NewsController extends AbstractController
 {

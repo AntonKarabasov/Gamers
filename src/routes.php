@@ -3,6 +3,7 @@
 return [
   '~^games/(\d+)$~' => [\Gamer\Controllers\GamesController::class, 'view'],
   '~^games/rating$~' => [\Gamer\Controllers\GamesController::class, 'rating'],
+  '~^games/add$~' => [\Gamer\Controllers\GamesController::class, 'add'],
   '~^news$~' => [\Gamer\Controllers\NewsController::class, 'viewAll'],
   '~^news/(\d+)$~' => [\Gamer\Controllers\NewsController::class, 'view'],
   '~^news/(\d+)/edit$~' => [\Gamer\Controllers\NewsController::class, 'edit'],

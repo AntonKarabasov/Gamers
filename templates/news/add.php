@@ -21,8 +21,5 @@
     </form>
 <div class="margin-8"></div>
 <?php include __DIR__ . '/../footer.php'; ?>
-<!--<div class="embed-responsive embed-responsive-16by9" >-->
-<!--    <img src="/../assets/img/news/news--><?//= $news->getId() ?><!--.jpg" alt="news--><?//= $news->getId() ?><!--">-->
-<!--</div>-->
 
 

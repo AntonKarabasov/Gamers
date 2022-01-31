@@ -5,7 +5,7 @@
 <div class="row">
     <?php foreach ($newGames as $game) {?>
     <div class="games_block col-lg-3 col-md-3 col-sm-3 col-xs-6">
-        <a href="/games/<?= $game->getId() ?>"><img src="/../assets/img/poster/<?= $game->getName() ?>.webp" alt="<?= $game->getName() ?>"></a>
+        <a href="/games/<?= $game->getId() ?>"><img src="<?= $game->getLinkPoster() ?>" alt="<?= $game->getName() ?>"></a>
         <div class="game_label"><?= $game->getName() ?></div>
     </div>
     <?php }?>
@@ -17,7 +17,7 @@
 <div class="row">
     <?php for($i = 0; $i<4; $i++) {?>
     <div class="games_block col-lg-3 col-md-3 col-sm-3 col-xs-6">
-        <a href="/games/<?= $topGames[$i]->getId() ?>"><img src="/../assets/img/poster/<?= $topGames[$i]->getName() ?>.webp" alt="<?= $topGames[$i]->getName() ?>"></a>
+        <a href="/games/<?= $topGames[$i]->getId() ?>"><img src="<?= $game->getLinkPoster() ?>" alt="<?= $topGames[$i]->getName() ?>"></a>
         <div class="game_label"><?= $topGames[$i]->getName() ?></div>
     </div>
    <?php }?>

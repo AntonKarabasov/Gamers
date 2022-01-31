@@ -17,7 +17,7 @@
                         <a href="/genres/<?= $genres[$i]->getId() ?>"><?= $genres[$i]->getName() . ', '?></a>
                   <?php } }?>
         </div>
-        <span>Платформы:</span>
+        <span>Платформы:
         <?php
         $platforms = $game->getPlatforms();
         for ($i = 0; $i < count($platforms); $i++) {
@@ -26,6 +26,7 @@
             <?php } else {?>
                 <a href="/platforms/<?= $platforms[$i]->getName() ?>" class="<?= $platforms[$i]->getCompanyByPlatform($platforms[$i]->getName())?>"><?= $platforms[$i]->getName() . ', '?></a>
             <?php } }?>
+        </span>
     </div>
 
     <h3>Описание:</h3>

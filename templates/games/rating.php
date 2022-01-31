@@ -14,7 +14,7 @@
         <?php foreach ($ratingGames as $game) {?>
             <tr>
                 <td class="col-lg-1 col-md-1 col-xs-2">
-                    <img class="img-responsive img-thumbnail" src="/../assets/img/poster/<?= $game->getName() ?>.webp" alt="<?= $game->getName() ?>">
+                    <img class="img-responsive img-thumbnail" src="<?= $game->getLinkPoster() ?>" alt="<?= $game->getName() ?>">
                 </td>
                 <td class="vert-align"><a href="/games/<?= $game->getId() ?>"><?= $game->getName() ?></a></td>
                 <td class="text-center vert-align"><a href="#"><?= $game->getYear() ?></a></td>

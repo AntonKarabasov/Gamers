@@ -2,6 +2,7 @@
 
 namespace Gamer\Models;
 
+use Gamer\Models\Games\Game;
 use Gamer\Services\Db;
 
 abstract class ActiveRecordEntity
@@ -65,7 +66,7 @@ abstract class ActiveRecordEntity
         $db->query($sql, $params2values, static::class);
     }
 
-    private function insert(array $mappedProperties): void
+    protected function insert(array $mappedProperties): void
     {
         $filteredProperties = array_filter($mappedProperties);
 
@@ -112,7 +113,7 @@ abstract class ActiveRecordEntity
 //        }
 //    }
 
-    private function refresh(): void
+    protected function refresh(): void
     {
         $objectFromDb = static::getById($this->id);
 

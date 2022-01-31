@@ -2,7 +2,10 @@
 
 namespace Gamer\Controllers;
 
+use Gamer\Exceptions\Forbidden;
+use Gamer\Exceptions\InvalidArgumentException;
 use Gamer\Exceptions\NotFoundException;
+use Gamer\Exceptions\UnauthorizedException;
 use Gamer\Models\Games\Game;
 use Gamer\View\View;
 use Gamer\Models\Users\User;
@@ -37,4 +40,28 @@ class GamesController extends AbstractController
         ], 'Рейтинг игр');
     }
 
+    public function add()
+    {
+        if ($this->user === null) {
+            throw new UnauthorizedException();
+        }
+
+        if (!$this->user->isAdmin()) {
+            throw new Forbidden('Для добавления игр нужно обладать правами администратора');
+        }
+
+        if (!empty($_POST)) {
+            try {
+                $game = Game::createFromArray($_POST, $_FILES);
+            } catch (InvalidArgumentException $e) {
+                $this->view->renderHtml('games/add.php', ['error' => $e->getMessage()]);
+                return;
+            }
+
+            header('Location: /games/' . $game->getId(), true, 302);
+            exit();
+        }
+
+        $this->view->renderHtml('games/add.php', [], 'Добавление новой игры');
+    }
 }
