@@ -10,6 +10,7 @@ return [
   '~^news/add$~' => [\Gamer\Controllers\NewsController::class, 'add'],
   '~^news/(\d+)/delete$~' => [\Gamer\Controllers\NewsController::class, 'delete'],
   '~^users/register$~' => [\Gamer\Controllers\UsersController::class, 'signUp'],
+  '~^users/profile$~' => [\Gamer\Controllers\UsersController::class, 'profile'],
   '~^users/login$~' => [\Gamer\Controllers\UsersController::class, 'login'],
   '~^users/logout$~' => [\Gamer\Controllers\UsersController::class, 'logout'],
   '~^platforms/(.+)$~' => [\Gamer\Controllers\PlatformsController::class, 'view'],

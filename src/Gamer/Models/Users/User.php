@@ -4,6 +4,8 @@ namespace Gamer\Models\Users;
 
 use Gamer\Models\ActiveRecordEntity;
 use Gamer\Exceptions\InvalidArgumentException;
+use Gamer\Models\Games\Game;
+use Gamer\Services\Upload;
 
 class User extends ActiveRecordEntity
 {
@@ -16,6 +18,9 @@ class User extends ActiveRecordEntity
 
     /** @var  int */
     protected $isConfirmed;
+
+    /** @var string */
+    protected $avatar;
 
     /** @var string */
     protected $role;
@@ -45,6 +50,15 @@ class User extends ActiveRecordEntity
     {
         return $this->email;
     }
+
+    /**
+     * @return string
+     */
+    public function getAvatar(): string
+    {
+        return $this->avatar;
+    }
+
 
     /**
      * @return bool
@@ -182,6 +196,72 @@ class User extends ActiveRecordEntity
         $user->save();
 
         return $user;
+    }
+
+    /**
+     * @return User
+     */
+    public function updateUserFromArray(array $userData, array $image): User
+    {
+        if (empty($userData['nickname'])) {
+            throw new InvalidArgumentException('Не передан nickname');
+        }
+
+        if (!preg_match('/^[a-zA-Z0-9]+$/', $userData['nickname'])) {
+            throw new InvalidArgumentException('Nickname может состоять только из символов латинского алфавита и цифр');
+        }
+
+        if ($this->nickname !== $userData['nickname']) {
+            if (static::findOneByColumn('nickname', $userData['nickname']) !== null  ) {
+                throw new InvalidArgumentException('Пользователь с таким nickname уже существует');
+            }
+        }
+
+        if (empty($userData['email'])) {
+            throw new InvalidArgumentException('Не передан email');
+        }
+
+        if (!filter_var($userData['email'], FILTER_VALIDATE_EMAIL)) {
+            throw new InvalidArgumentException('Email некорректен');
+        }
+
+        if ($this->email !== $userData['email']) {
+            if (static::findOneByColumn('email', $userData['email']) !== null) {
+                throw new InvalidArgumentException('Пользователь с таким email уже существует');
+            }
+        }
+
+        if (!empty($userData['password'])) {
+            if (mb_strlen($userData['password']) < 8) {
+                throw new InvalidArgumentException('Пароль должен быть не менее 8 символов');
+            }
+
+            if (empty($userData['repeatedPassword'])) {
+                throw new InvalidArgumentException('Повторите пароль');
+            }
+
+            if ($userData['repeatedPassword'] !== $userData['password']) {
+                throw new InvalidArgumentException('Пароли не совпадают');
+            }
+
+            $this->passwordHash = password_hash($userData['password'], PASSWORD_DEFAULT);
+        }
+
+        if ($image['attachment'] !== null) {
+            try {
+                $linkAvatar = Upload::uploadAvatar($image['attachment'], $this->getNickname(), true);
+                $this->avatar = $linkAvatar;
+            } catch (InvalidArgumentException $e) {
+                throw new InvalidArgumentException($e->getMessage());
+            }
+        }
+
+        $this->nickname = $userData['nickname'];
+        $this->email = $userData['email'];
+
+        $this->save();
+
+        return $this;
     }
 
     private function refreshAuthToken()

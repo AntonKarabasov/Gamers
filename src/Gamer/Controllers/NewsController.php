@@ -48,10 +48,28 @@ class NewsController extends AbstractController
             throw new NotFoundException();
         }
 
-        $news->setName('Новое название новости');
-        $news->setText('Новый текст новости');
+        if ($this->user === null) {
+            throw new UnauthorizedException();
+        }
 
-        $news->save();
+        if (!$this->user->isAdmin()) {
+            throw new Forbidden('Для редактирования новости нужно обладать правами администратора');
+        }
+
+        if (!empty($_POST)) {
+            try {
+                $news->updateFromArray($_POST, $_FILES);
+            } catch (InvalidArgumentException $e) {
+                $this->view->renderHtml('news/edit.php',
+                  ['error' => $e->getMessage(), 'news' => $news]);
+                return;
+            }
+
+            header('Location: /news/' . $news->getId(), true, 302);
+            exit();
+        }
+
+        $this->view->renderHtml('news/edit.php', ['news' => $news]);
     }
 
     public function  add()

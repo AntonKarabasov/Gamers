@@ -146,6 +146,15 @@ a {
      border-radius: 50%;
 }
 
+.avatar-profile {
+    width: 150px;
+    border-radius: 50%;
+}
+
+.avatar-label {
+    padding: 10px 0px 10px 50px;
+}
+
 .uname {
      font-size: 120%;
      font-weight: bold;
