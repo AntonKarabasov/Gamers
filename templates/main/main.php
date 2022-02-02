@@ -17,7 +17,7 @@
 <div class="row">
     <?php for($i = 0; $i<4; $i++) {?>
     <div class="games_block col-lg-3 col-md-3 col-sm-3 col-xs-6">
-        <a href="/games/<?= $topGames[$i]->getId() ?>"><img src="<?= $game->getLinkPoster() ?>" alt="<?= $topGames[$i]->getName() ?>"></a>
+        <a href="/games/<?= $topGames[$i]->getId() ?>"><img src="<?= $topGames[$i]->getLinkPoster() ?>" alt="<?= $topGames[$i]->getName() ?>"></a>
         <div class="game_label"><?= $topGames[$i]->getName() ?></div>
     </div>
    <?php }?>

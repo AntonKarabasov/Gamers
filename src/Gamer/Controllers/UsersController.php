@@ -3,6 +3,7 @@
 namespace Gamer\Controllers;
 
 
+use Gamer\Exceptions\UnauthorizedException;
 use Gamer\Models\Users\User;
 use Gamer\Models\Games\Game;
 use Gamer\Models\Users\UserActivationService;
@@ -85,7 +86,28 @@ class UsersController extends AbstractController
                 return;
             }
         }
-        $this->view->renderHtml('users/login.php');
+        $this->view->renderHtml('users/login.php', [] ,'Вход');
+    }
+
+    public function profile()
+    {
+        if ($this->user === null) {
+            throw new UnauthorizedException();
+        }
+
+        if (!empty($_POST) || !empty($_FILES)) {
+            try {
+                $this->user->updateUserFromArray($_POST, $_FILES);
+            } catch (InvalidArgumentException $e) {
+                $this->view->renderHtml('users/profile.php',
+                  ['error' => $e->getMessage()]);
+                return;
+            }
+
+            header('Location: /users/profile', true, 302);
+            exit();
+        }
+        $this->view->renderHtml('users/profile.php', [], 'Профиль');
     }
 
     public function logout()

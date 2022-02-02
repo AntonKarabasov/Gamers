@@ -7,7 +7,9 @@
     <br>
     <p><?= $news->getText() ?></p>
     <p>Автор: <i><?= $news->getAuthor()->getNickname() ?></i></p>
-
+    <?php if ($user !== null && $user->isAdmin()) {?>
+        <a href="/news/<?= $news->getId() ?>/edit" class="btn btn-lg btn-success pull-right">Редактировать</a>
+    <?php }?>
     <div class="margin-8"></div>
 
     <h3>Комментарии:</h3>

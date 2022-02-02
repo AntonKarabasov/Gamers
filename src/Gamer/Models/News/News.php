@@ -142,6 +142,36 @@ class News extends ActiveRecordEntity
         return $news;
     }
 
+    /**
+     * @return News
+     */
+    public function updateFromArray(array $fields, array $image): News
+    {
+        if (empty($fields['name'])) {
+            throw new InvalidArgumentException('Не передано название новости');
+        }
+
+        if (empty($fields['text'])) {
+            throw new InvalidArgumentException('Не передан текст новости');
+        }
+
+
+        if ($image['attachment']['size'] !== 0) {
+            try {
+                $link = Upload::uploadImage($image['attachment'], $this->getId(), true);
+                $this->setLinkImg($link);
+            } catch (InvalidArgumentException $e) {
+                throw new InvalidArgumentException($e->getMessage());
+            }
+        }
+
+        $this->setName($fields['name']);
+        $this->setText($fields['text']);
+
+        $this->save();
+
+        return $this;
+    }
 
     /**
      * @return string
