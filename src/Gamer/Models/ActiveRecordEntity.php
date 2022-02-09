@@ -160,6 +160,23 @@ abstract class ActiveRecordEntity
         return $db->query('SELECT * FROM `' . static::getTableName() . '` ORDER by `'. $column . '` DESC LIMIT ' . $limit . ';', [], static::class);
     }
 
+    public static function findByColumn(string $columnName, $value): ?array
+    {
+        $db = Db::getInstance();
+
+        $result = $db->query(
+          'SELECT * FROM `' . static::getTableName() . '` WHERE `' . $columnName . '` = :value;',
+          [':value' => $value],
+          static::class
+        );
+
+        if ($result === []) {
+            return null;
+        }
+
+        return $result;
+    }
+
     public static function findOneByColumn(string $columnName, $value): ?self
     {
         $db = Db::getInstance();

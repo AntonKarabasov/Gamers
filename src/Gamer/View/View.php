@@ -26,7 +26,6 @@ class View
 
         extract($this->extraVars);
         extract($vars);
-        $topGames = Game::findLimitAndOrder(10, 'rating');
 
         ob_start();
         include $this->templatesPath . '/' . $templateName;

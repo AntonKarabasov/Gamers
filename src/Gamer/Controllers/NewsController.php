@@ -6,6 +6,7 @@ use Gamer\Exceptions\Forbidden;
 use Gamer\Exceptions\UnauthorizedException;
 use Gamer\Exceptions\InvalidArgumentException;
 use Gamer\Exceptions\NotFoundException;
+use Gamer\Models\Comments\Comment;
 use Gamer\Models\Games\Game;
 use Gamer\Models\News\News;
 
@@ -17,12 +18,16 @@ class NewsController extends AbstractController
         /** @var News $news */
         $news = News::getById($newsId);
 
+        $comments = Comment::findByColumn('news_id', $newsId);
+
         if ($news === null) {
             throw new NotFoundException();
         }
 
         $this->view->renderHtml('news/view.php', [
-          'news' => $news
+          'news' => $news,
+          'topGames' => $this->topGames,
+          'comments' => $comments
         ], $news->getName());
     }
 
@@ -35,7 +40,8 @@ class NewsController extends AbstractController
         }
 
         $this->view->renderHtml('news/news.php', [
-          'news' => $news
+          'news' => $news,
+          'topGames' => $this->topGames
         ], 'Новости');
     }
 
@@ -69,7 +75,7 @@ class NewsController extends AbstractController
             exit();
         }
 
-        $this->view->renderHtml('news/edit.php', ['news' => $news]);
+        $this->view->renderHtml('news/edit.php', ['news' => $news, 'topGames' => $this->topGames]);
     }
 
     public function  add()
@@ -94,8 +100,9 @@ class NewsController extends AbstractController
             exit();
         }
 
-        $this->view->renderHtml('news/add.php');
+        $this->view->renderHtml('news/add.php', ['topGames' => $this->topGames,]);
     }
+
 
     public function delete($newsId)
     {
@@ -107,6 +114,6 @@ class NewsController extends AbstractController
         }
 
         $news->delete();
-        $this->view->renderHtml('news/delete.php', ['topGames' => Game::findLimitAndOrder(10, 'rating')], 'Страница удалена');
+        $this->view->renderHtml('news/delete.php', ['topGames' => $this->topGames,], 'Страница удалена');
     }
 }

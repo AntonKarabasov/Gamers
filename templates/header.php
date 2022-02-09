@@ -46,10 +46,10 @@
                 <div id="navbarCollapse" class="collapse navbar-collapse navbar-right">
                     <ul class="nav nav-pills">
                         <li><a href="/" class="nav-item">Главная</a></li>
-                        <li><a href="/platforms/PC" class="nav-item">PC</a></li>
-                        <li><a href="/platforms/PS" class="nav-item">PS</a></li>
-                        <li><a href="/platforms/Xbox" class="nav-item">Xbox</a></li>
-                        <li><a href="/platforms/Nintendo" class="nav-item">Nintendo</a></li>
+                        <li><a href="/games/PC/platforms" class="nav-item">PC</a></li>
+                        <li><a href="/games/PS/platforms" class="nav-item">PS</a></li>
+                        <li><a href="/games/Xbox/platforms" class="nav-item">Xbox</a></li>
+                        <li><a href="/games/Nintendo/platforms" class="nav-item">Nintendo</a></li>
                         <li><a href="/news" class="nav-item">Новости</a></li>
                         <li><a href="/games/rating" class="nav-item">Рейтинг игр</a></li>
                         <li><a href="/contacts" class="nav-item">Контакты</a></li>

@@ -16,17 +16,12 @@
     </div>
 </div>
 
-<?php if (!in_array($title, ['Регистрация', 'Вход']) && empty($error)) {?>
+
 <div class="panel panel-info">
     <div class="panel-heading"><div class="sidebar-header">Вход</div></div>
     <div class="panel-body">
         <?php if (empty($user)) {?>
         <form action="/users/login" method="post">
-            <?php if (!empty($errorLogin)): ?>
-                <div class="alert alert-danger" role="alert">
-                    <?= $errorLogin ?>
-                </div>
-            <?php endif; ?>
             <div class="form-group">
                 <input type="text" class="form-control input-lg" placeholder="Email"  name="email" value="<?= $_POST['email'] ?? '' ?>">
             </div>
@@ -44,7 +39,7 @@
         <?php }?>
     </div>
 </div>
-<?php }?>
+
 
 <div class="panel panel-info">
     <div class="panel-heading"><div class="sidebar-header">Новости</div></div>

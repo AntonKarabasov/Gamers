@@ -114,6 +114,21 @@ class User extends ActiveRecordEntity
         $this->save();
     }
 
+    public function canUserToReview(?array $reviews): bool
+    {
+        if (empty($reviews)) {
+            return true;
+        }
+
+        foreach ($reviews as $review) {
+            if ($review->getAuthorId() === $this->id) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public static function signUp(array $userData): User
     {
         if (empty($userData['nickname'])) {
@@ -247,7 +262,7 @@ class User extends ActiveRecordEntity
             $this->passwordHash = password_hash($userData['password'], PASSWORD_DEFAULT);
         }
 
-        if ($image['attachment'] !== null) {
+        if ($image['attachment']['size'] !== 0) {
             try {
                 $linkAvatar = Upload::uploadAvatar($image['attachment'], $this->getNickname(), true);
                 $this->avatar = $linkAvatar;

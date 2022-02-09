@@ -1,5 +1,5 @@
 <?php include __DIR__ . '/../header.php'; ?>
-    <h1>Рейтинг игр</h1>
+    <h1>Рейтинг игр <?= $platformsName ?? '' ?></h1>
     <hr>
     <table class="table table-striped">
         <thead>
@@ -17,7 +17,7 @@
                     <img class="img-responsive img-thumbnail" src="<?= $game->getLinkPoster() ?>" alt="<?= $game->getName() ?>">
                 </td>
                 <td class="vert-align"><a href="/games/<?= $game->getId() ?>"><?= $game->getName() ?></a></td>
-                <td class="text-center vert-align"><a href="#"><?= $game->getYear() ?></a></td>
+                <td class="text-center vert-align"><a href="/games/<?= $game->getYear() ?>/year"><?= $game->getYear() ?></a></td>
                 <td class="text-center vert-align"><span class="badge"><?= $game->getRating() ?></span></td>
             </tr>
         <?php }?>

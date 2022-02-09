@@ -82,7 +82,7 @@ class UsersController extends AbstractController
                 header('Location: /');
                 exit();
             } catch (InvalidArgumentException $e) {
-                $this->view->renderHtml('users/login.php', ['errorLogin' => $e->getMessage()], 'Вход');
+                $this->view->renderHtml('users/login.php', ['error' => $e->getMessage()], 'Вход');
                 return;
             }
         }
