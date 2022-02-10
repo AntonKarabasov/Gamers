@@ -67,7 +67,7 @@ a {
 }
 
 .margin-8 {
-     margin-top: 8%;
+     margin-top: 10%;
 }
 
 .panel {
@@ -256,6 +256,13 @@ footer a:hover {
     color: gold;
 }
 
+.contacts_link:hover > svg path{
+    fill:  #3ca13c;
+}
+
+.contacts_link .telegram {
+    transform: scale(1.25) translateY(3px) translateX(3px);
+}
 
 @media (max-width: 767px) {
      .nav-pills>li {

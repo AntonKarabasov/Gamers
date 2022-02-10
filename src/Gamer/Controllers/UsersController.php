@@ -3,12 +3,15 @@
 namespace Gamer\Controllers;
 
 
+use Gamer\Exceptions\Forbidden;
+use Gamer\Exceptions\TelegramException;
 use Gamer\Exceptions\UnauthorizedException;
 use Gamer\Models\Users\User;
 use Gamer\Models\Games\Game;
 use Gamer\Models\Users\UserActivationService;
 use Gamer\Models\Users\UsersAuthService;
 use Gamer\Services\EmailSender;
+use Gamer\Services\TelegramSender;
 use Gamer\View\View;
 use Gamer\Exceptions\InvalidArgumentException;
 use Gamer\Exceptions\ActivationException;
@@ -46,7 +49,7 @@ class UsersController extends AbstractController
             }
         }
 
-        $this->view->renderHtml('users/signUp.php', ['topGames' => Game::findLimitAndOrder(10, 'rating')], 'Регистрация');
+        $this->view->renderHtml('users/signUp.php', ['topGames' => $this->topGames], 'Регистрация');
     }
 
     public function activate(int $userId, string $activationCode)
@@ -69,7 +72,7 @@ class UsersController extends AbstractController
         } else {
             $user->activate();
             UserActivationService::deleteActivationCode($user, $activationCode);
-            $this->view->renderHtml('users/activationSuccessful.php');
+            $this->view->renderHtml('users/activationSuccessful.php', ['topGames' => $this->topGames]);
         }
     }
 
@@ -86,7 +89,7 @@ class UsersController extends AbstractController
                 return;
             }
         }
-        $this->view->renderHtml('users/login.php', [] ,'Вход');
+        $this->view->renderHtml('users/login.php', ['topGames' => $this->topGames] ,'Вход');
     }
 
     public function profile()
@@ -107,12 +110,39 @@ class UsersController extends AbstractController
             header('Location: /users/profile', true, 302);
             exit();
         }
-        $this->view->renderHtml('users/profile.php', [], 'Профиль');
+        $this->view->renderHtml('users/profile.php', ['topGames' => $this->topGames], 'Профиль');
     }
 
     public function logout()
     {
         UsersAuthService::deleteToken();
         header('Location: /');
+    }
+
+    public function contact()
+    {
+        if ($this->user === null) {
+            throw new UnauthorizedException();
+        }
+
+        if (!empty($_POST['text'])) {
+            try {
+                $text = 'Отправитель: ' . $this->user->getNickname() . "\n" .
+                         'Email отправителя ' . $this->user->getEmail() . "\n" .
+                         $_POST['text'];
+                TelegramSender::send($text);
+            } catch (TelegramException $e) {
+                $this->view->renderHtml('errors/500.php', ['error' => $e->getMessage()], 500);
+                return;
+            }catch (InvalidArgumentException $e) {
+                $this->view->renderHtml('users/contacts.php', ['error' => $e->getMessage()], 'Контакты');
+                return;
+            }
+
+            $this->view->renderHtml('users/sendSuccessful.php', ['topGames' => $this->topGames]);
+            exit();
+        }
+
+        $this->view->renderHtml('users/contacts.php', ['topGames' => $this->topGames], 'Контакты');
     }
 }
