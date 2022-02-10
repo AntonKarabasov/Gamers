@@ -1,4 +1,5 @@
 </div>
+
 <div class="col-lg-3 col-lg-pull-9">
 <div class="panel panel-info hidden-xs">
     <div class="panel-heading"><div class="sidebar-header">Поиск</div></div>

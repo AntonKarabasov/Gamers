@@ -22,6 +22,7 @@ return [
   '~^users/profile$~' => [\Gamer\Controllers\UsersController::class, 'profile'],
   '~^users/login$~' => [\Gamer\Controllers\UsersController::class, 'login'],
   '~^users/logout$~' => [\Gamer\Controllers\UsersController::class, 'logout'],
+  '~^contacts$~' => [\Gamer\Controllers\UsersController::class, 'contact'],
   '~^users/(\d+)/activate/(.+)$~' => [\Gamer\Controllers\UsersController::class, 'activate'],
   '~^$~' => [\Gamer\Controllers\MainController::class, 'main'],
 ];
