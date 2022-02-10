@@ -210,8 +210,59 @@ class Game extends ActiveRecordEntity
         $this->platforms = $platforms;
     }
 
+    protected function insert(array $mappedProperties): void
+    {
+        $filteredProperties = array_filter($mappedProperties);
 
-    public static function createFromArray(array $fields, array $poster)
+        $columns = [];
+        $paramsNames = [];
+        $params2values = [];
+        foreach ($filteredProperties as $columnName => $value) {
+            if (is_array($value)) {
+                if ($columnName === 'genres') {
+                    $relationTableArray['game_genres'] = $value;
+                    continue;
+                } elseif ($columnName === 'platforms') {
+                    $relationTableArray['game_platforms'] = $value;
+                    continue;
+                }
+            }
+            $columns[] = '`' . $columnName . '`';
+            $paramName = ':' . $columnName;
+            $paramsNames[] = $paramName;
+            $params2values[$paramName] = $value;
+        }
+
+        $columnsViaSemicolon = implode(', ', $columns);
+        $paramsNamesViaSemicolon = implode(', ', $paramsNames);
+
+        $sql = 'INSERT INTO ' . static::getTableName() . ' (' . $columnsViaSemicolon . ') VALUES (' . $paramsNamesViaSemicolon . ');';
+
+        $db = Db::getInstance();
+        $db->query($sql, $params2values, static::class);
+        $this->id = $db->getLastInsertId();
+        foreach ($relationTableArray as $tableName => $values) {
+            if ($tableName === 'game_genres') {
+                $columnName = 'genres_id';
+            } elseif ($tableName === 'game_platforms') {
+                $columnName = 'platforms_id';
+            }
+
+            foreach ($values as $value) {
+                $sql = 'INSERT INTO `' . $tableName .'` (`game_id`, `' . $columnName .'`) VALUES (:game_id, :' . $columnName .')';
+
+                $db->query($sql, [':game_id' => $this->id,
+                                  ':' . $columnName => $value]);
+
+            }
+        }
+        $this->refresh();
+    }
+
+    /**
+     * @return Game
+     */
+    public static function createFromArray(array $fields, array $poster): Game
     {
         if (empty($fields['name'])) {
             throw new InvalidArgumentException('Не передано название игры');
@@ -271,53 +322,24 @@ class Game extends ActiveRecordEntity
         return $game;
     }
 
-    protected function insert(array $mappedProperties): void
+    /**
+     * @return ?array
+     */
+    public static function searchGames(string $query): ?array
     {
-        $filteredProperties = array_filter($mappedProperties);
-
-        $columns = [];
-        $paramsNames = [];
-        $params2values = [];
-        foreach ($filteredProperties as $columnName => $value) {
-            if (is_array($value)) {
-                if ($columnName === 'genres') {
-                    $relationTableArray['game_genres'] = $value;
-                    continue;
-                } elseif ($columnName === 'platforms') {
-                    $relationTableArray['game_platforms'] = $value;
-                    continue;
-                }
-            }
-            $columns[] = '`' . $columnName . '`';
-            $paramName = ':' . $columnName;
-            $paramsNames[] = $paramName;
-            $params2values[$paramName] = $value;
+        if (empty($query)) {
+            throw new InvalidArgumentException('Не передано название игры');
         }
 
-        $columnsViaSemicolon = implode(', ', $columns);
-        $paramsNamesViaSemicolon = implode(', ', $paramsNames);
-
-        $sql = 'INSERT INTO ' . static::getTableName() . ' (' . $columnsViaSemicolon . ') VALUES (' . $paramsNamesViaSemicolon . ');';
-
-        $db = Db::getInstance();
-        $db->query($sql, $params2values, static::class);
-        $this->id = $db->getLastInsertId();
-        foreach ($relationTableArray as $tableName => $values) {
-            if ($tableName === 'game_genres') {
-                $columnName = 'genres_id';
-            } elseif ($tableName === 'game_platforms') {
-                $columnName = 'platforms_id';
-            }
-
-            foreach ($values as $value) {
-                $sql = 'INSERT INTO `' . $tableName .'` (`game_id`, `' . $columnName .'`) VALUES (:game_id, :' . $columnName .')';
-
-                $db->query($sql, [':game_id' => $this->id,
-                                  ':' . $columnName => $value]);
-
-            }
+        if (strlen($query) < 3) {
+            throw new InvalidArgumentException('Слишком короткий поисковый запрос');
+        } else if (strlen($query) > 128) {
+            throw new InvalidArgumentException('Слишком длинный поисковый запрос');
         }
-        $this->refresh();
+
+        $games = self::search($query, 'name');
+
+        return $games;
     }
 
     /**
