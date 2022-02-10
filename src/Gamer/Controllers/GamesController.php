@@ -142,4 +142,19 @@ class GamesController extends AbstractController
 
         $this->view->renderHtml('games/add.php', [], 'Добавление новой игры');
     }
+
+    public function search() {
+        if (!empty($_POST['query'])) {
+            try {
+                $result = Game::searchGames($_POST['query']);
+            } catch (InvalidArgumentException $e) {
+                $this->view->renderHtml('games/search.php', ['error' => $e->getMessage(), 'query'=> $_POST['query']]);
+                return;
+            }
+            $this->view->renderHtml('games/search.php', ['foundGames' => $result, 'query'=> $_POST['query'], 'topGames' => $this->topGames], 'Результаты поиска');
+            exit();
+        }
+
+        $this->view->renderHtml('games/search.php', ['error' => 'Пустой поисковой запрос', 'topGames' => $this->topGames], 'Результаты поиска');
+    }
 }
