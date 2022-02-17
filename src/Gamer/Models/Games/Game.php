@@ -210,6 +210,24 @@ class Game extends ActiveRecordEntity
         $this->platforms = $platforms;
     }
 
+    public function delete(): void
+    {
+        $db = Db::getInstance();
+
+        $sql = 'DELETE FROM `game_genres` WHERE game_id = :id;';
+        $db->query($sql, [':id' => $this->id]);
+
+        $sql = 'DELETE FROM `game_platforms` WHERE game_id = :id;';
+        $db->query($sql, [':id' => $this->id]);
+
+        $sql = 'DELETE FROM `reviews` WHERE game_id = :id;';
+        $db->query($sql, [':id' => $this->id]);
+
+        unlink(str_replace( 'http://gamer.test/',  '' , $this->linkPoster));
+
+        parent::delete();
+    }
+
     protected function insert(array $mappedProperties): void
     {
         $filteredProperties = array_filter($mappedProperties);

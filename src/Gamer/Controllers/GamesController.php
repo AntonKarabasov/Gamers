@@ -27,6 +27,7 @@ class GamesController extends AbstractController
         $this->view->renderHtml('games/view.php', [
           'game' => $result,
           'reviews'=> $reviews,
+          'shortNews' => $this->shortNews,
           'topGames' => $this->topGames
         ], $result->getName());
     }
@@ -48,6 +49,7 @@ class GamesController extends AbstractController
         $this->view->renderHtml('games/rating.php', [
           'ratingGames' => $sortedGames,
           'platformsName' => $genreName,
+          'shortNews' => $this->shortNews,
           'topGames' => $this->topGames
         ], ucfirst($genreName));
     }
@@ -82,6 +84,7 @@ class GamesController extends AbstractController
         $this->view->renderHtml('games/rating.php', [
           'ratingGames' => $sortedGames,
           'platformsName' => $platformsName,
+          'shortNews' => $this->shortNews,
           'topGames' => $this->topGames
         ], ucfirst($platformsName));
     }
@@ -100,6 +103,7 @@ class GamesController extends AbstractController
         $this->view->renderHtml('games/rating.php', [
           'ratingGames' => $sortedGames,
           'platformsName' => $year,
+          'shortNews' => $this->shortNews,
           'topGames' => $this->topGames
         ], $year);
     }
@@ -114,6 +118,7 @@ class GamesController extends AbstractController
 
         $this->view->renderHtml('games/rating.php', [
           'ratingGames' => $ratingGames,
+          'shortNews' => $this->shortNews,
           'topGames' => $this->topGames
         ], 'Рейтинг игр');
     }
@@ -140,7 +145,10 @@ class GamesController extends AbstractController
             exit();
         }
 
-        $this->view->renderHtml('games/add.php', [], 'Добавление новой игры');
+        $this->view->renderHtml('games/add.php', [
+          'shortNews' => $this->shortNews,
+          'topGames' => $this->topGames
+        ], 'Добавление новой игры');
     }
 
     public function search() {
@@ -155,6 +163,32 @@ class GamesController extends AbstractController
             exit();
         }
 
-        $this->view->renderHtml('games/search.php', ['error' => 'Пустой поисковой запрос', 'topGames' => $this->topGames], 'Результаты поиска');
+        $this->view->renderHtml('games/search.php', [
+          'error' => 'Пустой поисковой запрос',
+          'shortNews' => $this->shortNews,
+          'topGames' => $this->topGames], 'Результаты поиска');
+    }
+
+    public function delete(int $gameId)
+    {
+        $game = Game::getById($gameId);
+
+        if ($game === null) {
+            throw new NotFoundException();
+        }
+
+        if (!$this->user->isAdmin()) {
+            throw new Forbidden('Вы не можете удалять игры');
+        }
+
+        $game->delete();
+
+        $games = Game::findAll();
+
+        if ($games === null) {
+            throw new NotFoundException();
+        }
+
+        header('Location: /admin/games', true, 302);
     }
 }

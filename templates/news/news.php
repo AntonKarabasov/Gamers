@@ -4,14 +4,11 @@
  <div class="row">
       <div class="well clearfix">
            <div class="col-lg-3 col-md-2">
-                <a href="show.html"><img class="img-thumbnail" src="<?= $oneNews->getLinkImg() ?>" alt="<?= $oneNews->getName()?>"></a>
+                <a href="/news/<?= $oneNews->getId() ?>"><img class="img-thumbnail" src="<?= $oneNews->getLinkImg() ?>" alt="<?= $oneNews->getName()?>"></a>
            </div>
            <div class="col-lg-9 col-md-10">
-                <h3><?= $oneNews->getName()?></h3>
+                <a href="/news/<?= $oneNews->getId() ?>"><h3><?= $oneNews->getName()?></h3></a>
                 <p><?= mb_substr($oneNews->getText(), 0, 300) . '...' ?></p>
-           </div>
-           <div class="col-lg-12">
-                <a href="/news/<?= $oneNews->getId() ?>" class="btn btn-lg btn-success pull-right">подробнее</a>
            </div>
       </div>
  </div>

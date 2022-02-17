@@ -36,19 +36,26 @@
             <p>Добро пожаловать, <?= $user->getNickname() ?></p>
             <br>
             <a href="/users/logout" class="btn btn-success pull-left">Выйти</a>
-            <a href="/users/profile" class="btn btn-success pull-right">Профиль</a>
-        <?php }?>
+            <?php if ($user->isAdmin()) {?>
+            <a href="/admin" class="btn btn-success pull-right">Админка</a>
+            <?php } else {?>
+                <a href="/users/profile" class="btn btn-success pull-right">Профиль</a>
+            <?php }
+            }?>
     </div>
 </div>
 
-
+<?php if (!empty($shortNews)) {?>
 <div class="panel panel-info">
     <div class="panel-heading"><div class="sidebar-header">Новости</div></div>
+    <?php foreach ($shortNews as $oneShortNews) {?>
     <div class="panel-body">
-        <p>22.11.21</p>
-        <p>День рождения сайта</p>
+        <p><?= $oneShortNews->getDate() ?></p>
+        <p><?= $oneShortNews->getText() ?></p>
     </div>
+    <?php }?>
 </div>
+<?php }?>
 
 <?php if (!empty($topGames)) {?>
 <div class="panel panel-info ">

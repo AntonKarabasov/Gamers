@@ -1,5 +1,5 @@
 <?php include __DIR__ . '/../header.php'; ?>
-    <h1>Создание новой статьи</h1>
+    <h1>Создание новой новости</h1>
     <hr>
 <?php if (!empty($error)): ?>
     <div class="alert alert-danger" role="alert">

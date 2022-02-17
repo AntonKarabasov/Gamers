@@ -26,6 +26,7 @@ class NewsController extends AbstractController
 
         $this->view->renderHtml('news/view.php', [
           'news' => $news,
+          'shortNews' => $this->shortNews,
           'topGames' => $this->topGames,
           'comments' => $comments
         ], $news->getName());
@@ -41,6 +42,7 @@ class NewsController extends AbstractController
 
         $this->view->renderHtml('news/news.php', [
           'news' => $news,
+          'shortNews' => $this->shortNews,
           'topGames' => $this->topGames
         ], 'Новости');
     }
@@ -75,7 +77,10 @@ class NewsController extends AbstractController
             exit();
         }
 
-        $this->view->renderHtml('news/edit.php', ['news' => $news, 'topGames' => $this->topGames]);
+        $this->view->renderHtml('news/edit.php', [
+          'news' => $news,
+          'shortNews' => $this->shortNews,
+          'topGames' => $this->topGames]);
     }
 
     public function  add()
@@ -100,12 +105,18 @@ class NewsController extends AbstractController
             exit();
         }
 
-        $this->view->renderHtml('news/add.php', ['topGames' => $this->topGames,]);
+        $this->view->renderHtml('news/add.php', [
+          'shortNews' => $this->shortNews,
+          'topGames' => $this->topGames], 'Добавление новости');
     }
 
 
     public function delete($newsId)
     {
+        if (!$this->user->isAdmin()) {
+            throw new Forbidden('Вы не можете удалять новости');
+        }
+
         /** @var News $news */
         $news = News::getById($newsId);
 
@@ -114,6 +125,7 @@ class NewsController extends AbstractController
         }
 
         $news->delete();
-        $this->view->renderHtml('news/delete.php', ['topGames' => $this->topGames,], 'Страница удалена');
+
+        header('Location: /admin/news', true, 302);
     }
 }

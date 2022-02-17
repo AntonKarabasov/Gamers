@@ -18,6 +18,7 @@ class MainController extends AbstractController
         $this->view->renderHtml('main/main.php', [
           'newGames' => $newGames,
           'topGames' => $this->topGames,
+          'shortNews' => $this->shortNews,
           'news' => $news
           ]);
     }

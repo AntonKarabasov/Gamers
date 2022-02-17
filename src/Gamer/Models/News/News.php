@@ -5,6 +5,7 @@ namespace Gamer\Models\News;
 use Gamer\Models\ActiveRecordEntity;
 use Gamer\Models\Users\User;
 use Gamer\Exceptions\InvalidArgumentException;
+use Gamer\Services\Db;
 use Gamer\Services\Upload;
 
 class News extends ActiveRecordEntity
@@ -64,13 +65,6 @@ class News extends ActiveRecordEntity
         return $this->createdAt;
     }
 
-    /**
-     * @return int
-     */
-    public function getId(): int
-    {
-        return $this->id;
-    }
 
     /**
      * @param string $name
@@ -102,6 +96,18 @@ class News extends ActiveRecordEntity
     public function setAuthor(User $author): void
     {
         $this->authorId = $author->getId();
+    }
+
+    public function delete(): void
+    {
+        $db = Db::getInstance();
+
+        $sql = 'DELETE FROM `comments` WHERE news_id = :id;';
+        $db->query($sql, [':id' => $this->id]);
+
+        unlink(str_replace( 'http://gamer.test/',  '' , $this->linkImg));
+
+        parent::delete();
     }
 
     /**
