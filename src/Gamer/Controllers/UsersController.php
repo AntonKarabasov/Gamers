@@ -49,7 +49,10 @@ class UsersController extends AbstractController
             }
         }
 
-        $this->view->renderHtml('users/signUp.php', ['topGames' => $this->topGames], 'Регистрация');
+        $this->view->renderHtml('users/signUp.php', [
+          'topGames' => $this->topGames,
+          'shortNews' => $this->shortNews,
+        ], 'Регистрация');
     }
 
     public function activate(int $userId, string $activationCode)
@@ -72,7 +75,9 @@ class UsersController extends AbstractController
         } else {
             $user->activate();
             UserActivationService::deleteActivationCode($user, $activationCode);
-            $this->view->renderHtml('users/activationSuccessful.php', ['topGames' => $this->topGames]);
+            $this->view->renderHtml('users/activationSuccessful.php', [
+              'topGames' => $this->topGames,
+              'shortNews' => $this->shortNews,]);
         }
     }
 
@@ -89,7 +94,9 @@ class UsersController extends AbstractController
                 return;
             }
         }
-        $this->view->renderHtml('users/login.php', ['topGames' => $this->topGames] ,'Вход');
+        $this->view->renderHtml('users/login.php', [
+          'topGames' => $this->topGames,
+          'shortNews' => $this->shortNews,] ,'Вход');
     }
 
     public function profile()
@@ -110,7 +117,9 @@ class UsersController extends AbstractController
             header('Location: /users/profile', true, 302);
             exit();
         }
-        $this->view->renderHtml('users/profile.php', ['topGames' => $this->topGames], 'Профиль');
+        $this->view->renderHtml('users/profile.php', [
+          'topGames' => $this->topGames,
+          'shortNews' => $this->shortNews,], 'Профиль');
     }
 
     public function logout()
@@ -139,10 +148,14 @@ class UsersController extends AbstractController
                 return;
             }
 
-            $this->view->renderHtml('users/sendSuccessful.php', ['topGames' => $this->topGames]);
+            $this->view->renderHtml('users/sendSuccessful.php', [
+              'topGames' => $this->topGames,
+              'shortNews' => $this->shortNews,]);
             exit();
         }
 
-        $this->view->renderHtml('users/contacts.php', ['topGames' => $this->topGames], 'Контакты');
+        $this->view->renderHtml('users/contacts.php', [
+          'topGames' => $this->topGames,
+          'shortNews' => $this->shortNews,], 'Контакты');
     }
 }

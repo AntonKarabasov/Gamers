@@ -36,7 +36,12 @@ class ReviewsController extends AbstractController
             exit();
         }
 
-        $this->view->renderHtml('games/view.php', ['game' => $game, 'reviews'=> $reviews]);
+        $this->view->renderHtml('games/view.php', [
+          'game' => $game,
+          'reviews'=> $reviews,
+          'topGames' => $this->topGames,
+          'shortNews' => $this->shortNews,
+        ]);
     }
 
     public function delete(int $reviewId)
@@ -58,7 +63,12 @@ class ReviewsController extends AbstractController
         $game = Game::getById($review->getGameId());
         $reviews = Review::findByColumn('game_id', $review->getGameId());
 
-        $this->view->renderHtml('games/view.php', ['game' => $game, 'reviews'=> $reviews]);
+        $this->view->renderHtml('games/view.php', [
+          'game' => $game,
+          'reviews'=> $reviews,
+          'topGames' => $this->topGames,
+          'shortNews' => $this->shortNews,
+        ]);
     }
 
     public function edit(int $reviewId)
@@ -81,11 +91,16 @@ class ReviewsController extends AbstractController
                 header('Location: /games/' . $editedReview->getGameId() . '#review' . $editedReview->getId(), true, 302);
                 exit();
             } catch (InvalidArgumentException $e) {
-                $this->view->renderHtml('games/view.php', ['error' => $e->getMessage(), 'game' => $game, 'reviews'=> $reviews, 'editedReview' => $editedReview]);
+                $this->view->renderHtml('games/view.php', ['error' => $e->getMessage(), 'game' => $game, 'reviews'=> $reviews, 'editedReview' => $editedReview, 'topGames' => $this->topGames, 'shortNews' => $this->shortNews]);
                 return;
             }
         }
 
-        $this->view->renderHtml('games/view.php', ['game' => $game, 'reviews'=> $reviews, 'editedReview' => $editedReview]);
+        $this->view->renderHtml('games/view.php', [
+          'game' => $game,
+          'reviews'=> $reviews,
+          'topGames' => $this->topGames,
+          'shortNews' => $this->shortNews,
+          'editedReview' => $editedReview]);
     }
 }

@@ -32,7 +32,11 @@ class CommentsController extends AbstractController
             exit();
         }
 
-       $this->view->renderHtml('news/view.php', ['news' => $news, 'comments'=> $comments]);
+       $this->view->renderHtml('news/view.php', [
+         'news' => $news,
+         'topGames' => $this->topGames,
+         'shortNews' => $this->shortNews,
+         'comments'=> $comments]);
     }
 
     public function delete(int $commentId)
@@ -54,7 +58,11 @@ class CommentsController extends AbstractController
         $news = News::getById($comment->getNewsId());
         $comments = Comment::findByColumn('news_id', $comment->getNewsId());
 
-        $this->view->renderHtml('news/view.php', ['news' => $news, 'comments'=> $comments]);
+        $this->view->renderHtml('news/view.php', [
+          'news' => $news,
+          'topGames' => $this->topGames,
+          'shortNews' => $this->shortNews,
+          'comments'=> $comments]);
     }
 
     public function edit(int $commentId)
@@ -79,6 +87,11 @@ class CommentsController extends AbstractController
         $news = News::getById($editedComment->getNewsId());
         $comments = Comment::findByColumn('news_id', $editedComment->getNewsId());
 
-        $this->view->renderHtml('news/view.php', ['news' => $news, 'comments'=> $comments, 'editedComment' => $editedComment]);
+        $this->view->renderHtml('news/view.php', [
+          'news' => $news,
+          'comments'=> $comments,
+          'topGames' => $this->topGames,
+          'shortNews' => $this->shortNews,
+          'editedComment' => $editedComment]);
     }
 }

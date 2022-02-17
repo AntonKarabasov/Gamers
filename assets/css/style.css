@@ -264,6 +264,20 @@ footer a:hover {
     transform: scale(1.25) translateY(3px) translateX(3px);
 }
 
+.img-thumbnail {
+    margin-top: 20px;
+}
+
+.news {
+    position: relative;
+}
+
+.news-button {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+
 @media (max-width: 767px) {
      .nav-pills>li {
           float: none;

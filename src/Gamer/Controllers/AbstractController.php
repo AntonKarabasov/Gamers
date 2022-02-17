@@ -3,6 +3,7 @@
 namespace Gamer\Controllers;
 
 use Gamer\Models\Games\Game;
+use Gamer\Models\ShortNews\ShortNews;
 use Gamer\Models\Users\User;
 use Gamer\Models\Users\UsersAuthService;
 use Gamer\View\View;
@@ -19,12 +20,16 @@ abstract class AbstractController
     /** @var array */
     protected $topGames;
 
+    /** @var array */
+    protected $shortNews;
+
     public function __construct()
     {
         $this->user = UsersAuthService::getUserByToken();
         $this->view = new View(__DIR__ . '/../../../templates');
         $this->view->setVar('user', $this->user);
         $this->topGames = Game::findLimitAndOrder(10, 'rating');
+        $this->shortNews = ShortNews::findLimitAndOrder(5, 'created_at');
     }
 
     protected function findBiggest(array $array, string $method): int
