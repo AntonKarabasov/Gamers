@@ -16,6 +16,9 @@ class User extends ActiveRecordEntity
     /** @var string */
     protected $email;
 
+    /** @var string */
+    protected $dateOfBirth;
+
     /** @var  int */
     protected $isConfirmed;
 
@@ -50,6 +53,15 @@ class User extends ActiveRecordEntity
     {
         return $this->email;
     }
+
+    /**
+     * @return string
+     */
+    public function getDateOfBirth(): ?string
+    {
+        return $this->dateOfBirth;
+    }
+
 
     /**
      * @return string
@@ -260,6 +272,10 @@ class User extends ActiveRecordEntity
             }
 
             $this->passwordHash = password_hash($userData['password'], PASSWORD_DEFAULT);
+        }
+
+        if (!empty($userData['date'])) {
+            $this->dateOfBirth = $userData['date'];
         }
 
         if ($image['attachment']['size'] !== 0) {

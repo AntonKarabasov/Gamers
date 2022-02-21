@@ -25,6 +25,9 @@
         <div class="form-group">
             <label>Повторите пароль <input class="form-control" type="password" name="repeatedPassword" ></label>
         </div>
+        <div class="form-group">
+            <label>Дата рождения <input class="form-control" type="date" name="date" value="<?= $user->getDateOfBirth() ?? "1990-01-01" ?>"></label>
+        </div>
         <input type="submit" class="btn btn-lg btn-success pull" value="Сохранить изменения">
     </form>
 
