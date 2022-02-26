@@ -17,14 +17,14 @@
                 <input class="form-control" type="text" name="name" value="<?= $_POST['name'] ?? '' ?>" placeholder="Название игры">
             </div>
             <div class="col-lg-4 col-md-4 col-xs-4">
-                <input class="form-control" type="url" name="linkVideo" value="<?= $_POST['linkVideo'] ?? '' ?>" placeholder="Ссылка на видео">
+                <input class="form-control" type="url" name="link_video" value="<?= $_POST['link_video'] ?? '' ?>" placeholder="Ссылка на видео">
             </div>
         </div>
     </div>
     <div class="form-group">
         <div class="row">
             <div class="col-lg-3 col-md-3 col-xs-3">
-                <label>Дата выхода <input class="form-control" type="date" name="date" value="<?= $_POST['date'] ?? '' ?>"></label>
+                <label>Дата выхода <input class="form-control" type="date" name="dates" value="<?= $_POST['dates'] ?? '' ?>"></label>
             </div>
             <div class="col-lg-2 col-md-2 col-xs-2">
                 <label>Рейтинг <input class="form-control" type="number" name="rating" min="0" max="10" step="0.1" value="<?= $_POST['rating'] ?? '' ?>"></label>
@@ -122,7 +122,7 @@
     <div class="form-group">
         <div class="row">
             <div class="col-lg-9 col-md-9 col-xs-9">
-                <textarea class="form-control" id="Textarea" name="text" id="text" rows="6" cols="50" placeholder="Описание"><?= $_POST['text'] ?? '' ?></textarea>
+                <textarea class="form-control" id="Textarea" name="descriptions" id="text" rows="6" cols="50" placeholder="Описание"><?= $_POST['descriptions'] ?? '' ?></textarea>
             </div>
         </div>
     </div>

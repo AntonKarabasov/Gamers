@@ -148,7 +148,7 @@ class Review extends ActiveRecordEntity
         $review = new Review();
         $review->setAuthor($author);
         $review->setGameId($gameId);
-        $review->setText($fields['text']);
+        $review->setText(nl2br($fields['text']));
         $review->setRating($fields['rating']);
 
         $review->save();

@@ -113,7 +113,7 @@ class News extends ActiveRecordEntity
     /**
      * @return News
      */
-    public static function createFromArray(array $fields, array $image, User $author): News
+    public static function createFromArray(array $fields, User $author, array $image = []): News
     {
         if (empty($fields['name'])) {
             throw new InvalidArgumentException('Не передано название новости');
@@ -123,7 +123,7 @@ class News extends ActiveRecordEntity
             throw new InvalidArgumentException('Не передан текст новости');
         }
 
-        if (empty($image['attachment'])) {
+        if (empty($image['attachment']) && empty($fields['link_img'])) {
             throw new InvalidArgumentException('Не передана картинка новости');
         }
 
@@ -132,16 +132,22 @@ class News extends ActiveRecordEntity
         $news->setName($fields['name']);
         $news->setText($fields['text']);
 
-        $news->save();
-
-        try {
-            $link = Upload::uploadImage($image['attachment'], $news->getId());
-        } catch (InvalidArgumentException $e) {
-            $news->delete();
-            throw new InvalidArgumentException($e->getMessage());
+        if (!empty($fields['link_img'])) {
+            $news->setLinkImg($fields['link_img']);
         }
 
-        $news->setLinkImg($link);
+        if ($image['attachment']['size'] !== 0 && !empty($image['attachment'])) {
+            try {
+                $link = Upload::uploadImage($image['attachment'],
+                  $news->getId());
+            } catch (InvalidArgumentException $e) {
+                $news->delete();
+                throw new InvalidArgumentException($e->getMessage());
+            }
+
+            $news->setLinkImg($link);
+        }
+
         $news->save();
 
 
@@ -151,7 +157,7 @@ class News extends ActiveRecordEntity
     /**
      * @return News
      */
-    public function updateFromArray(array $fields, array $image): News
+    public function updateFromArray(array $fields, array $image = []): News
     {
         if (empty($fields['name'])) {
             throw new InvalidArgumentException('Не передано название новости');
@@ -161,6 +167,9 @@ class News extends ActiveRecordEntity
             throw new InvalidArgumentException('Не передан текст новости');
         }
 
+        if (!empty($fields['link_img'])) {
+            $this->setLinkImg($fields['link_img']);
+        }
 
         if ($image['attachment']['size'] !== 0) {
             try {

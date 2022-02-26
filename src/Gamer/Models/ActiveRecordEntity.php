@@ -5,7 +5,7 @@ namespace Gamer\Models;
 use Gamer\Models\Games\Game;
 use Gamer\Services\Db;
 
-abstract class ActiveRecordEntity
+abstract class ActiveRecordEntity implements \JsonSerializable
 {
     /** @var int */
     protected $id;
@@ -98,6 +98,11 @@ abstract class ActiveRecordEntity
         $db = Db::getInstance();
         $db->query($sql, [':id' => $this->id]);
         $this->id = null;
+    }
+
+    public function jsonSerialize()
+    {
+        return $this->mapPropertiesToDbFormat();
     }
 
 //    private function refresh(): void

@@ -47,6 +47,33 @@ class NewsController extends AbstractController
         ], 'Новости');
     }
 
+    public function  add()
+    {
+        if ($this->user === null) {
+            throw new UnauthorizedException();
+        }
+
+        if (!$this->user->isAdmin()) {
+            throw new Forbidden('Для добавления новости нужно обладать правами администратора');
+        }
+
+        if (!empty($_POST)) {
+            try {
+                $news = News::createFromArray($_POST, $this->user, $_FILES);
+            } catch (InvalidArgumentException $e) {
+                $this->view->renderHtml('news/add.php', ['error' => $e->getMessage()]);
+                return;
+            }
+
+            header('Location: /news/' . $news->getId(), true, 302);
+            exit();
+        }
+
+        $this->view->renderHtml('news/add.php', [
+          'shortNews' => $this->shortNews,
+          'topGames' => $this->topGames], 'Добавление новости');
+    }
+
     public function edit(int $newsId)
     {
         /** @var News $news */
@@ -82,34 +109,6 @@ class NewsController extends AbstractController
           'shortNews' => $this->shortNews,
           'topGames' => $this->topGames]);
     }
-
-    public function  add()
-    {
-        if ($this->user === null) {
-            throw new UnauthorizedException();
-        }
-
-        if (!$this->user->isAdmin()) {
-            throw new Forbidden('Для добавления новости нужно обладать правами администратора');
-        }
-
-        if (!empty($_POST)) {
-            try {
-                $news = News::createFromArray($_POST, $_FILES, $this->user);
-            } catch (InvalidArgumentException $e) {
-                $this->view->renderHtml('news/add.php', ['error' => $e->getMessage()]);
-                return;
-            }
-
-            header('Location: /news/' . $news->getId(), true, 302);
-            exit();
-        }
-
-        $this->view->renderHtml('news/add.php', [
-          'shortNews' => $this->shortNews,
-          'topGames' => $this->topGames], 'Добавление новости');
-    }
-
 
     public function delete($newsId)
     {

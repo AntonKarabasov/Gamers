@@ -110,7 +110,7 @@ class Comment extends ActiveRecordEntity
         $comments = new Comment;
         $comments->setAuthor($author);
         $comments->setNewsId($newsId);
-        $comments->setText($fields['text']);
+        $comments->setText(nl2br($fields['text']));
 
         $comments->save();
 

@@ -47,7 +47,7 @@ abstract class AbstractController
         return $biggestIndex;
     }
 
-    public  function selectionSortByColumn(array $array, string $method): array
+    protected function selectionSortByColumn(array $array, string $method): array
     {
         $sortedArray = [];
         $sizeArray = count($array);
@@ -59,5 +59,12 @@ abstract class AbstractController
         }
 
         return $sortedArray;
+    }
+
+    protected function getInputData(){
+        return json_decode(
+          file_get_contents('php://input'),
+          true
+        );
     }
 }

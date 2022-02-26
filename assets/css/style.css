@@ -278,6 +278,10 @@ footer a:hover {
     top: 10px;
 }
 
+.comment-body  {
+    padding-left: 70px;
+}
+
 @media (max-width: 767px) {
      .nav-pills>li {
           float: none;
