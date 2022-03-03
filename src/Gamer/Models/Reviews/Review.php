@@ -145,10 +145,12 @@ class Review extends ActiveRecordEntity
             throw new InvalidArgumentException('Поставьте оценку');
         }
 
+        $text = nl2br(htmlentities($fields['text']));
+
         $review = new Review();
         $review->setAuthor($author);
         $review->setGameId($gameId);
-        $review->setText(nl2br($fields['text']));
+        $review->setText($text);
         $review->setRating($fields['rating']);
 
         $review->save();

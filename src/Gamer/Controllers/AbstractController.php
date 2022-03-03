@@ -29,7 +29,7 @@ abstract class AbstractController
         $this->view = new View(__DIR__ . '/../../../templates');
         $this->view->setVar('user', $this->user);
         $this->topGames = Game::findLimitAndOrder(10, 'rating');
-        $this->shortNews = ShortNews::findLimitAndOrder(5, 'created_at');
+        $this->shortNews = ShortNews::findLimitAndOrder(3, 'created_at');
     }
 
     protected function findBiggest(array $array, string $method): int

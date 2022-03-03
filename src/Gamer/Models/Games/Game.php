@@ -331,7 +331,7 @@ class Game extends ActiveRecordEntity
         $game->setRating($fields['rating']);
         $game->setPlatforms($fields['platforms']);
         $game->setGenres($fields['genres']);
-        $game->setDescriptions($fields['descriptions']);
+        $game->setDescriptions(nl2br(htmlentities($fields['descriptions'])));
 
         if ($poster['attachment']['size'] !== 0 && !empty($poster['attachment'])) {
             try {
@@ -366,6 +366,8 @@ class Game extends ActiveRecordEntity
         } else if (strlen($query) > 128) {
             throw new InvalidArgumentException('Слишком длинный поисковый запрос');
         }
+
+        $query = htmlentities($query);
 
         $games = self::search($query, 'name');
 

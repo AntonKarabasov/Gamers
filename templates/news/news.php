@@ -14,5 +14,15 @@
  </div>
 <?php }?>
 
+<div class="text-center">
+    <?php for ($pageNum = 1; $pageNum <= $pagesCount; $pageNum++): ?>
+        <?php if ($currentPageNum === $pageNum): ?>
+            <b><?= $pageNum ?></b>
+        <?php else: ?>
+            <a href="/news/page/<?= $pageNum ?>"><?= $pageNum ?></a>
+        <?php endif; ?>
+    <?php endfor; ?>
+</div>
+
  <div class="margin-8 clear"></div>
 <?php include __DIR__ . '/../footer.php'; ?>

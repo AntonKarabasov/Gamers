@@ -297,5 +297,43 @@ abstract class ActiveRecordEntity implements \JsonSerializable
         return $entities ? $entities[0] : null;
     }
 
+    public static function getPagesCountFromDb(int $itemsPerPage): int
+    {
+        $db = Db::getInstance();
+        $result = $db->query('SELECT COUNT(*) AS cnt FROM ' . static::getTableName() . ';');
+        return ceil($result[0]->cnt / $itemsPerPage);
+    }
+
+    public static function getPagesCountFromArray(array $array, int $itemsPerPage): int
+    {
+        return ceil(count($array) / $itemsPerPage);
+    }
+
+    /**
+     * @return static[]
+     */
+    public static function getPageFromDb(int $pageNum, int $itemsPerPage): array
+    {
+        $db = Db::getInstance();
+        return $db->query(
+          sprintf(
+            'SELECT * FROM `%s` ORDER BY id DESC LIMIT %d OFFSET %d;',
+            static::getTableName(),
+            $itemsPerPage,
+            ($pageNum - 1) * $itemsPerPage
+          ),
+          [],
+          static::class
+        );
+    }
+
+    /**
+     * @return static[]
+     */
+    public static function getPageFromArray(array $array, int $pageNum, int $itemsPerPage): array
+    {
+        return array_slice($array, ($pageNum - 1) * $itemsPerPage, $itemsPerPage);
+    }
+
     abstract protected static function getTableName(): string;
 }

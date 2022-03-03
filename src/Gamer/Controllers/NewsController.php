@@ -32,19 +32,20 @@ class NewsController extends AbstractController
         ], $news->getName());
     }
 
-    public function viewAll()
+    public function page(int $pageNum)
     {
-        $news = News::findAllOrder('created_at');
-
-        if ($news === null) {
-            throw new NotFoundException();
-        }
-
         $this->view->renderHtml('news/news.php', [
-          'news' => $news,
+          'news' => News::getPageFromDb($pageNum, 5),
+          'pagesCount' => News::getPagesCountFromDb(5),
+          'currentPageNum' => $pageNum,
           'shortNews' => $this->shortNews,
           'topGames' => $this->topGames
         ], 'Новости');
+    }
+
+    public function viewAll()
+    {
+        $this->page(1);
     }
 
     public function  add()

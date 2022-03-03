@@ -202,6 +202,10 @@ footer a:hover {
     justify-content: flex-end;
 }
 
+.rating {
+    padding-bottom: 10px;
+}
+
 .rating-area:not(:checked) > input {
     display: none;
 }
@@ -240,6 +244,8 @@ footer a:hover {
 
 .rating-mini {
     display: inline-block;
+    margin-right: 5px;
+    margin-bottom: 10px;
     font-size: 0;
 }
 .rating-mini span {

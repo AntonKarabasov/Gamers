@@ -130,11 +130,11 @@ class News extends ActiveRecordEntity
         $news = new News;
         $news->setAuthor($author);
         $news->setName($fields['name']);
-        $news->setText($fields['text']);
-
+        $news->setText(nl2br(htmlentities($fields['text'])));
         if (!empty($fields['link_img'])) {
             $news->setLinkImg($fields['link_img']);
         }
+        $news->save();
 
         if ($image['attachment']['size'] !== 0 && !empty($image['attachment'])) {
             try {
@@ -146,10 +146,8 @@ class News extends ActiveRecordEntity
             }
 
             $news->setLinkImg($link);
+            $news->save();
         }
-
-        $news->save();
-
 
         return $news;
     }
