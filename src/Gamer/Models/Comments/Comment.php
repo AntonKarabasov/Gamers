@@ -94,6 +94,10 @@ class Comment extends ActiveRecordEntity
             return false;
         }
 
+        if ($user->isAdmin()) {
+            return true;
+        }
+
         return $this->authorId === $user->getId();
     }
 

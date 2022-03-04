@@ -118,9 +118,12 @@
         <?php foreach ($reviews as $review) {?>
         <div class="well comment" id="review<?= $review->getId() ?>">
             <div class="comment-header">
-                <img src="<?= $review->getAuthor()->getAvatar() ?>" alt="<?= $review->getAuthor()->getNickname() ?>" class="avatar">
-                <span class="uname"><?= $review->getAuthor()->getNickname() ?></span>
-                <span class="pull-right"><?php if ($user->isAdmin() || $review->isAuthor($user)) {?>
+                <div class="col-lg-2 col-md-2 col-xs-3 text-center">
+                    <img src="<?= $review->getAuthor()->getAvatar() ?>" alt="<?= $review->getAuthor()->getNickname() ?>" class="avatar">
+                    <br>
+                    <span class="uname"><?= $review->getAuthor()->getNickname() ?></span>
+                </div>
+                <span class="pull-right"><?php if ($review->isAuthor($user)) {?>
                         <a href="/reviews/<?= $review->getId() ?>/delete" class="icon-button">
                         <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-x-lg pull-right" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"/>
@@ -139,13 +142,13 @@
             </div>
             <div class="comment-body">
                 <p><?= $review->getText() ?></p>
-                <div class="rating">
-                    <span class="pull-right"> <?= $review->getRating() ?>/10 </span>
-                    <div class="rating-mini pull-right">
-                        <?php for ($i = 1; $i <= 10; $i++) { ?>
-                            <span class="<?= $review->getActive($i) ?>"></span>
-                        <?php } ?>
-                    </div>
+            </div>
+            <div class="rating">
+                <span class="pull-right"> <?= $review->getRating() ?>/10 </span>
+                <div class="rating-mini pull-right">
+                    <?php for ($i = 1; $i <= 10; $i++) { ?>
+                        <span class="<?= $review->getActive($i) ?>"></span>
+                    <?php } ?>
                 </div>
             </div>
         </div>

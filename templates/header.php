@@ -7,7 +7,7 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
     <link rel="shortcut icon" href="/assets/img/favicon.ico" type="image/png">
-    <title><?= $title ?? 'Gamer' ?></title>
+    <title><?= $title ?? 'Gamers' ?></title>
 
     <!-- Bootstrap -->
     <link href="/../assets/css/bootstrap.min.css" rel="stylesheet">

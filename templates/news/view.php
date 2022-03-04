@@ -44,9 +44,12 @@
         <?php foreach ($comments as $comment) {?>
         <div class="well comment" id="comment<?= $comment->getId() ?>">
             <div class="comment-header">
-                <img src="<?= $comment->getAuthor()->getAvatar() ?>" alt="<?= $comment->getAuthor()->getNickname() ?>" class="avatar">
-                <span class="uname"><?= $comment->getAuthor()->getNickname() ?></span>
-                <span class="pull-right"><?php if ($user->isAdmin() || $comment->isAuthor($user)) {?>
+                <div class="col-lg-2 col-md-2 col-xs-3 text-center">
+                    <img src="<?= $comment->getAuthor()->getAvatar() ?>" alt="<?= $comment->getAuthor()->getNickname() ?>" class="avatar">
+                    <br>
+                    <span class="uname"><?= $comment->getAuthor()->getNickname() ?></span>
+                </div>
+                <span class="pull-right"><?php if ($comment->isAuthor($user)) {?>
                         <a href="/comments/<?= $comment->getId() ?>/delete" class="icon-button">
                 <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-x-lg pull-right" viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"/>
@@ -66,8 +69,9 @@
             <div class="comment-body">
                 <?= $comment->getText() ?>
             </div>
-            <span class="comment-data pull-right"><?= $comment->getCreatedAt() ?></span>
+            <div class="comment-data pull-right"><?= $comment->getCreatedAt() ?></div>
         </div>
+
     <?php }
     }?>
 
