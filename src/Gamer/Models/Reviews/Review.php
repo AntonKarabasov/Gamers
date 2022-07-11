@@ -117,6 +117,10 @@ class Review extends ActiveRecordEntity
             return false;
         }
 
+        if ($user->isAdmin()) {
+            return true;
+        }
+
         return $this->authorId === $user->getId();
     }
 
@@ -145,10 +149,12 @@ class Review extends ActiveRecordEntity
             throw new InvalidArgumentException('Поставьте оценку');
         }
 
+        $text = nl2br(htmlentities($fields['text']));
+
         $review = new Review();
         $review->setAuthor($author);
         $review->setGameId($gameId);
-        $review->setText($fields['text']);
+        $review->setText($text);
         $review->setRating($fields['rating']);
 
         $review->save();

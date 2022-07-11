@@ -18,6 +18,7 @@
         "ext-gd": "*",
         "intervention/image": "^2.7",
         "ext-mbstring": "*",
-        "guzzlehttp/guzzle": "^7.4"
+        "guzzlehttp/guzzle": "^7.4",
+        "ext-json": "*"
 }
 }

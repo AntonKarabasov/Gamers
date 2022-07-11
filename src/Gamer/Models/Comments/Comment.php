@@ -94,6 +94,10 @@ class Comment extends ActiveRecordEntity
             return false;
         }
 
+        if ($user->isAdmin()) {
+            return true;
+        }
+
         return $this->authorId === $user->getId();
     }
 
@@ -104,13 +108,15 @@ class Comment extends ActiveRecordEntity
     public static function createFromArray(array $fields, User $author, int $newsId): Comment
     {
         if (empty($fields['text'])) {
-            throw new InvalidArgumentException('Комментарий пустой');
+            throw new InvalidArgumentException('Комментарий не может  быть пустым');
         }
+
+        $text = nl2br(htmlentities($fields['text']));
 
         $comments = new Comment;
         $comments->setAuthor($author);
         $comments->setNewsId($newsId);
-        $comments->setText($fields['text']);
+        $comments->setText($text);
 
         $comments->save();
 

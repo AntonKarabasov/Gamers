@@ -280,17 +280,17 @@ class Game extends ActiveRecordEntity
     /**
      * @return Game
      */
-    public static function createFromArray(array $fields, array $poster): Game
+    public static function createFromArray(array $fields, array $poster = []): Game
     {
         if (empty($fields['name'])) {
             throw new InvalidArgumentException('Не передано название игры');
         }
 
-        if (empty($fields['linkVideo'])) {
-            throw new InvalidArgumentException('Не передана ссыдка на видео игры');
+        if (empty($fields['link_video'])) {
+            throw new InvalidArgumentException('Не передана ссылка на видео игры');
         }
 
-        if (empty($fields['date'])) {
+        if (empty($fields['dates']) && (empty($fields['year']) || empty($fields['date']) )) {
             throw new InvalidArgumentException('Не передана дата выхода');
         }
 
@@ -306,34 +306,46 @@ class Game extends ActiveRecordEntity
             throw new InvalidArgumentException('Не передан жанр');
         }
 
-        if (empty($fields['text'])) {
+        if (empty($fields['descriptions'])) {
             throw new InvalidArgumentException('Не передано описание игры');
         }
 
-        if (empty($poster['attachment'])) {
+        if (empty($poster['attachment']) && empty($fields['link_poster'])) {
             throw new InvalidArgumentException('Не передан постер игры');
         }
 
-        try {
-            $linkPoster = Upload::uploadPoster($poster['attachment'], $fields['name']);
-        } catch (InvalidArgumentException $e) {
-            throw new InvalidArgumentException($e->getMessage());
-        }
 
-
-        $date = explode('-', $fields['date']);
 
         $game = new Game();
         $game->setName($fields['name']);
-        $game->setLinkPoster($linkPoster);
-        $game->setLinkVideo($fields['linkVideo']);
-        $game->setDate($date[2] . '.' . $date[1]);
-        $game->setYear($date[0]);
+        $game->setLinkVideo($fields['link_video']);
+
+        if (!empty($fields['dates'])) {
+            $date = explode('-', $fields['dates']);
+            $fields['date'] = $date[2] . '.' . $date[1];
+            $fields['year'] = $date[0];
+        }
+
+        $game->setDate($fields['date']);
+        $game->setYear($fields['year']);
         $game->setRating($fields['rating']);
         $game->setPlatforms($fields['platforms']);
         $game->setGenres($fields['genres']);
-        $game->setDescriptions($fields['text']);
+        $game->setDescriptions(nl2br(htmlentities($fields['descriptions'])));
 
+        if ($poster['attachment']['size'] !== 0 && !empty($poster['attachment'])) {
+            try {
+                $linkPoster = Upload::uploadPoster($poster['attachment'],
+                  $fields['name']);
+            } catch (InvalidArgumentException $e) {
+                throw new InvalidArgumentException($e->getMessage());
+            }
+            $game->setLinkPoster($linkPoster);
+        }
+
+        if (!empty($fields['link_poster'])) {
+            $game->setLinkPoster($fields['link_poster']);
+        }
 
         $game->save();
 
@@ -354,6 +366,8 @@ class Game extends ActiveRecordEntity
         } else if (strlen($query) > 128) {
             throw new InvalidArgumentException('Слишком длинный поисковый запрос');
         }
+
+        $query = htmlentities($query);
 
         $games = self::search($query, 'name');
 

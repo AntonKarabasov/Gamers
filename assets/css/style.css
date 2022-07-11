@@ -140,9 +140,10 @@ a {
 }
 
 .avatar {
-     float: left;
+    height: auto;
+    margin-top: 20px;
      margin-right: 2%;
-     width: 50px;
+     width: 60%;
      border-radius: 50%;
 }
 
@@ -152,21 +153,34 @@ a {
 }
 
 .avatar-label {
-    padding: 10px 0px 10px 50px;
+    padding: 10px 0 10px 50px;
 }
 
 .uname {
-     font-size: 120%;
-     font-weight: bold;
+    word-wrap: break-word;
+     font-size: 100%;
+    text-align: center;
 }
 
 .comment-data {
+     position: absolute;
+     right: 20px;
+     bottom: 20px;
      font-size: 80%;
      color: rgb(173, 170, 170);
 }
 
 .comment-body {
-     padding-top: 2%;
+    margin-left: 15px;
+}
+
+.well {
+    overflow: auto;
+    padding: 10px;
+}
+
+.comment-header {
+    height: 100%;
 }
 
 textarea.form-control {
@@ -201,6 +215,7 @@ footer a:hover {
     flex-direction: row-reverse;
     justify-content: flex-end;
 }
+
 
 .rating-area:not(:checked) > input {
     display: none;
@@ -240,6 +255,8 @@ footer a:hover {
 
 .rating-mini {
     display: inline-block;
+    margin-right: 5px;
+    margin-bottom: 10px;
     font-size: 0;
 }
 .rating-mini span {
@@ -276,6 +293,10 @@ footer a:hover {
     position: absolute;
     right: 10px;
     top: 10px;
+}
+
+.comment-body  {
+    padding-left: 70px;
 }
 
 @media (max-width: 767px) {

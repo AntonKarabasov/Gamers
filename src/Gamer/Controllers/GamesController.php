@@ -56,6 +56,11 @@ class GamesController extends AbstractController
 
     public function viewByPlatforms(string $platformsName)
     {
+        $this->viewByPlatformsPage($platformsName, 1);
+    }
+
+    public function viewByPlatformsPage(string $platformsName, int $pageNum)
+    {
         $platformsNames = Platform::getIdPlatformsByCompany($platformsName);
         $platforms = [];
         foreach ($platformsNames as $platformName) {
@@ -81,8 +86,13 @@ class GamesController extends AbstractController
             throw new NotFoundException();
         }
 
+        $ratingRout = "/games/$platformsName/platforms/page/";
+
         $this->view->renderHtml('games/rating.php', [
-          'ratingGames' => $sortedGames,
+          'ratingGames' => Game::getPageFromArray($sortedGames, $pageNum, 10),
+          'pagesCount' => Game::getPagesCountFromArray($sortedGames, 10),
+          'currentPageNum' => $pageNum,
+          'ratingRout' => $ratingRout,
           'platformsName' => $platformsName,
           'shortNews' => $this->shortNews,
           'topGames' => $this->topGames
@@ -90,6 +100,11 @@ class GamesController extends AbstractController
     }
 
     public function viewByYear(string $year)
+    {
+        $this->viewByYearPage($year, 1);
+    }
+
+    public function viewByYearPage(string $year, int $pageNum)
     {
         $games = Game::findByColumn('year', $year);
 
@@ -99,9 +114,13 @@ class GamesController extends AbstractController
 
         $sortedGames = $this->selectionSortByColumn($games, 'getRating');
 
+        $ratingRout = "/games/$year/platforms/page/";
 
         $this->view->renderHtml('games/rating.php', [
-          'ratingGames' => $sortedGames,
+          'ratingGames' => Game::getPageFromArray($sortedGames, $pageNum, 10),
+          'pagesCount' => Game::getPagesCountFromArray($sortedGames, 10),
+          'currentPageNum' => $pageNum,
+          'ratingRout' => $ratingRout,
           'platformsName' => $year,
           'shortNews' => $this->shortNews,
           'topGames' => $this->topGames
@@ -110,17 +129,28 @@ class GamesController extends AbstractController
 
     public function rating()
     {
+        $this->ratingPage(1);
+    }
+
+    public function ratingPage(int $pageNum)
+    {
         $ratingGames = Game::findAllOrder('rating');
 
         if ($ratingGames === null) {
             throw new NotFoundException();
         }
 
+        $ratingRout = '/games/rating/page/';
+
         $this->view->renderHtml('games/rating.php', [
-          'ratingGames' => $ratingGames,
+          'ratingGames' => Game::getPageFromArray($ratingGames, $pageNum, 10),
+          'pagesCount' => Game::getPagesCountFromArray($ratingGames, 10),
+          'currentPageNum' => $pageNum,
+          'ratingRout' => $ratingRout,
           'shortNews' => $this->shortNews,
           'topGames' => $this->topGames
         ], 'Рейтинг игр');
+
     }
 
     public function add()
@@ -159,7 +189,11 @@ class GamesController extends AbstractController
                 $this->view->renderHtml('games/search.php', ['error' => $e->getMessage(), 'query'=> $_POST['query']]);
                 return;
             }
-            $this->view->renderHtml('games/search.php', ['foundGames' => $result, 'query'=> $_POST['query'], 'topGames' => $this->topGames], 'Результаты поиска');
+            $this->view->renderHtml('games/search.php', [
+              'foundGames' => $result,
+              'query'=> $_POST['query'],
+              'topGames' => $this->topGames
+            ], 'Результаты поиска');
             exit();
         }
 
